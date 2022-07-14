@@ -30,8 +30,7 @@ def assert_not_called_with(self, *args, **kwargs):
     except AssertionError:
         return
     raise AssertionError(
-        "Expected %s to not have been called."
-        % self._format_mock_call_signature(args, kwargs)
+        f"Expected {self._format_mock_call_signature(args, kwargs)} to not have been called."
     )
 
 

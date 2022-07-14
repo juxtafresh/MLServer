@@ -46,7 +46,7 @@ def build_image(
         dockerfile_path = write_dockerfile(tmp_dir, dockerfile)
         _docker_command_suffix = f"{folder} -f {dockerfile_path} -t {image_tag}"
         if no_cache:
-            build_cmd = _docker_command_prefix + "--no-cache " + _docker_command_suffix
+            build_cmd = f"{_docker_command_prefix}--no-cache {_docker_command_suffix}"
         else:
             build_cmd = _docker_command_prefix + _docker_command_suffix
         build_env = os.environ.copy()

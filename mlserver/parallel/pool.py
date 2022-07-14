@@ -49,7 +49,7 @@ class InferencePool:
         self._responses: Queue[InferenceResponseMessage] = Queue()
         self._async_responses: Dict[str, Future[InferenceResponse]] = {}
         self._executor = ThreadPoolExecutor()
-        for idx in range(self._settings.parallel_workers):
+        for _ in range(self._settings.parallel_workers):
             # TODO: Set callback to restart worker if it goes down (would
             # `worker.join` help with that?)
             worker = Worker(self._responses)
@@ -225,10 +225,7 @@ class InferencePool:
             if model.settings.parallel_workers <= 0:
                 return False
 
-        if not self._settings.parallel_workers:
-            return False
-
-        return True
+        return bool(self._settings.parallel_workers)
 
     async def close(self):
         logger.info("Waiting for inference pool shutdown")

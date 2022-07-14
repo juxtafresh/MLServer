@@ -20,16 +20,9 @@ class CodecNotFound(MLServerError):
 
         field_category = ""
         if is_input:
-            if is_request:
-                field_category = "input request"
-            else:
-                field_category = "input field"
+            field_category = "input request" if is_request else "input field"
         else:
-            if is_request:
-                field_category = "output response"
-            else:
-                field_category = "output field"
-
+            field_category = "output response" if is_request else "output field"
         msg = f"Codec not found for {field_category} {msg}"
         super().__init__(msg)
 

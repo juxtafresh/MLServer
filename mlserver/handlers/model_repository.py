@@ -23,14 +23,12 @@ class ModelRepositoryHandlers:
         repository_items = []
         for model_settings in all_model_settings:
             index_item = await self._to_item(model_settings)
-            if payload.ready:
-                # TODO: If filtering by ready, we could ready directly from the
-                # active model registry
-                if index_item.state == State.READY:
-                    repository_items.append(index_item)
-            else:
+            if (
+                payload.ready
+                and index_item.state == State.READY
+                or not payload.ready
+            ):
                 repository_items.append(index_item)
-
         return RepositoryIndexResponse(__root__=repository_items)
 
     async def _to_item(
@@ -67,13 +65,13 @@ class ModelRepositoryHandlers:
             model = await self._model_registry.load(model_settings)
 
             # Add to loaded versions set to later remove stale models
-            model_version = model.version if model.version else NO_VERSION_KEY
+            model_version = model.version or NO_VERSION_KEY
             loaded_versions.add(model_version)
 
         # Remove stale models
         all_models = await self._model_registry.get_models(name)
         for model in all_models:
-            model_version = model.version if model.version else NO_VERSION_KEY
+            model_version = model.version or NO_VERSION_KEY
             if model_version not in loaded_versions:
                 await self._model_registry.unload_version(model.name, model.version)
 

@@ -17,8 +17,7 @@ from mlserver_alibi_explain.common import convert_from_bytes
 def payload() -> InferenceRequest:
     data = np.random.randn(1, 28, 28, 1) * 255
 
-    # now we go via the inference model and see if we get the same results
-    inference_request = InferenceRequest(
+    return InferenceRequest(
         parameters=Parameters(content_type=NumpyCodec.ContentType),
         inputs=[
             RequestInput(
@@ -29,7 +28,6 @@ def payload() -> InferenceRequest:
             )
         ],
     )
-    return inference_request
 
 
 @pytest.fixture()

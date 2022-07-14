@@ -50,9 +50,12 @@ def _get_content_type(
     if request.parameters and request.parameters.content_type:
         return request.parameters.content_type
 
-    if metadata is not None:
-        if metadata.parameters and metadata.parameters.content_type:
-            return metadata.parameters.content_type
+    if (
+        metadata is not None
+        and metadata.parameters
+        and metadata.parameters.content_type
+    ):
+        return metadata.parameters.content_type
 
     return None
 
@@ -77,12 +80,13 @@ def encode_response_output(
         else find_input_codec_by_payload(payload)
     )
 
-    if not codec:
-        return None
-
-    return codec.encode_output(
-        name=request_output.name,
-        payload=payload,
+    return (
+        codec.encode_output(
+            name=request_output.name,
+            payload=payload,
+        )
+        if codec
+        else None
     )
 
 
@@ -179,10 +183,7 @@ class SingleInputRequestCodec(RequestCodec):
 
     @classmethod
     def can_encode(cls, payload: Any) -> bool:
-        if cls.InputCodec is None:
-            return False
-
-        return cls.InputCodec.can_encode(payload)
+        return False if cls.InputCodec is None else cls.InputCodec.can_encode(payload)
 
     @classmethod
     def encode_response(

@@ -3,10 +3,7 @@ from mlserver import types, MLModel
 
 class SumModel(MLModel):
     async def predict(self, payload: types.InferenceRequest) -> types.InferenceResponse:
-        total = 0
-        for inp in payload.inputs:
-            total += sum(inp.data)
-
+        total = sum(sum(inp.data) for inp in payload.inputs)
         output = types.ResponseOutput(
             name="total", shape=[1], datatype="FP32", data=[total]
         )

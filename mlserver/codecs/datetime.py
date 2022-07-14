@@ -12,26 +12,16 @@ _DatetimeStrCodec = "ascii"
 
 
 def _to_iso(elem: _Datetime) -> str:
-    if isinstance(elem, str):
-        # Assume date has already been encoded upstream
-        return elem
-
-    return elem.isoformat()
+    return elem if isinstance(elem, str) else elem.isoformat()
 
 
 def _encode_datetime(elem: _Datetime, use_bytes: bool) -> Union[bytes, str]:
     iso_date = _to_iso(elem)
-    if not use_bytes:
-        return iso_date
-
-    return iso_date.encode(_DatetimeStrCodec)
+    return iso_date.encode(_DatetimeStrCodec) if use_bytes else iso_date
 
 
 def _ensure_str(elem: PackElement) -> str:
-    if isinstance(elem, str):
-        return elem
-
-    return elem.decode(_DatetimeStrCodec)
+    return elem if isinstance(elem, str) else elem.decode(_DatetimeStrCodec)
 
 
 def _decode_datetime(elem: PackElement) -> datetime:

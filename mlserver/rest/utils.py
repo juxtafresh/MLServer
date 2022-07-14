@@ -11,10 +11,7 @@ def to_status_code(flag: bool, error_code: int = status.HTTP_400_BAD_REQUEST) ->
     """
     Convert a boolean flag into a HTTP status code.
     """
-    if flag:
-        return status.HTTP_200_OK
-
-    return error_code
+    return status.HTTP_200_OK if flag else error_code
 
 
 def matches(
@@ -25,10 +22,7 @@ def matches(
 
     scope = to_scope(custom_handler)
     match, _ = route.matches(scope)
-    if match == match.NONE:
-        return False
-
-    return True
+    return match != match.NONE
 
 
 def to_scope(custom_handler: CustomHandler) -> Scope:

@@ -83,13 +83,11 @@ class ModelRepository:
 
     async def find(self, name: str) -> List[ModelSettings]:
         all_settings = await self.list()
-        selected = []
-        for model_settings in all_settings:
-            # TODO: Implement other version policies (e.g. "Last N")
-            if model_settings.name == name:
-                selected.append(model_settings)
-
-        if len(selected) == 0:
+        if selected := [
+            model_settings
+            for model_settings in all_settings
+            if model_settings.name == name
+        ]:
+            return selected
+        else:
             raise ModelNotFound(name)
-
-        return selected

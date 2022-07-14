@@ -99,16 +99,17 @@ def extract_headers(inference_response: InferenceResponse) -> Optional[Dict[str,
 
 
 def _check_current_event_loop_policy() -> str:
-    policy = (
+    return (
         "uvloop"
-        if type(asyncio.get_event_loop_policy()).__module__.startswith("uvloop")
+        if type(asyncio.get_event_loop_policy()).__module__.startswith(
+            "uvloop"
+        )
         else "asyncio"
     )
-    return policy
 
 
 def install_uvloop_event_loop():
-    if "uvloop" == _check_current_event_loop_policy():
+    if _check_current_event_loop_policy() == "uvloop":
         return
 
     try:

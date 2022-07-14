@@ -242,10 +242,7 @@ def test_encode_request(
     assert inference_request == expected
 
 
-@pytest.mark.parametrize(
-    "inference_request, expected",
-    [
-        (
+@pytest.mark.parametrize("inference_request, expected", [(
             InferenceRequest(
                 inputs=[
                     RequestInput(
@@ -265,9 +262,7 @@ def test_encode_request(
                 ]
             ),
             pd.DataFrame({"a": [np.array([1, 2, 3])], "b": ["hello world"]}),
-        ),
-        (
-            InferenceRequest(
+        ), (InferenceRequest(
                 inputs=[
                     RequestInput(
                         name="a",
@@ -285,15 +280,7 @@ def test_encode_request(
                         shape=[3],
                     ),
                 ]
-            ),
-            pd.DataFrame(
-                {
-                    "a": [[1], [2], [3]],
-                    "b": [a for a in b"ABC"],
-                }
-            ),
-        ),
-        (
+            ), pd.DataFrame({"a": [[1], [2], [3]], "b": list(b"ABC")})), (
             InferenceRequest(
                 inputs=[
                     RequestInput(
@@ -306,8 +293,7 @@ def test_encode_request(
                 ]
             ),
             pd.DataFrame({"a": np.array([1], dtype=np.int32)}),
-        ),
-        (
+        ), (
             InferenceRequest(
                 inputs=[
                     RequestInput(
@@ -365,9 +351,7 @@ def test_encode_request(
                     "f": "bool",
                 }
             ),
-        ),
-    ],
-)
+        )])
 def test_decode_request(inference_request, expected):
     decoded = PandasCodec.decode_request(inference_request)
 

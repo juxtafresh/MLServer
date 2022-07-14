@@ -35,12 +35,7 @@ class GRPCServer:
             self._model_repository_handlers
         )
 
-        interceptors = []
-
-        if self._settings.debug:
-            # If debug, enable access logs
-            interceptors = [LoggingInterceptor()]
-
+        interceptors = [LoggingInterceptor()] if self._settings.debug else []
         if self._settings.metrics_endpoint:
             interceptors.append(PromServerInterceptor())
 

@@ -31,7 +31,7 @@ def test_workers_start(inference_pool: InferencePool, settings: Settings):
 
 
 async def test_close(inference_pool: InferencePool):
-    worker_pids = [pid for pid in inference_pool._workers]
+    worker_pids = list(inference_pool._workers)
 
     await inference_pool.close()
 
