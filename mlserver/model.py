@@ -62,9 +62,7 @@ class MLModel:
     @property
     def version(self) -> Optional[str]:
         params = self._settings.parameters
-        if params is not None:
-            return params.version
-        return None
+        return params.version if params is not None else None
 
     @property
     def settings(self) -> ModelSettings:
@@ -123,9 +121,9 @@ class MLModel:
         payload: Any,
         default_codec: Optional[RequestCodecLike] = None,
     ) -> InferenceResponse:
-        inference_response = encode_inference_response(payload, self._settings)
-
-        if inference_response:
+        if inference_response := encode_inference_response(
+            payload, self._settings
+        ):
             return inference_response
 
         if default_codec:
@@ -140,11 +138,9 @@ class MLModel:
         request_output: RequestOutput,
         default_codec: Optional[InputCodecLike] = None,
     ) -> ResponseOutput:
-        response_output = encode_response_output(
+        if response_output := encode_response_output(
             payload, request_output, self._outputs_index
-        )
-
-        if response_output:
+        ):
             return response_output
 
         if default_codec:

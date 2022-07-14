@@ -27,10 +27,11 @@ class TensorDictCodec(RequestCodec):
 
     @classmethod
     def can_encode(cls, payload: Any) -> bool:
-        if not isinstance(payload, dict):
-            return False
-
-        return is_list_of(list(payload.values()), np.ndarray)
+        return (
+            is_list_of(list(payload.values()), np.ndarray)
+            if isinstance(payload, dict)
+            else False
+        )
 
     @classmethod
     def encode_response(

@@ -51,7 +51,7 @@ setup(
         "uvicorn",
         "starlette_exporter",
         "py-grpc-prometheus",
-        "uvloop;" + env_marker_cpython,
+        f"uvloop;{env_marker_cpython}",
         "aiokafka",
     ],
     extras_require={"all": ["orjson"]},

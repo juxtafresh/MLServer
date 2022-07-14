@@ -45,10 +45,7 @@ def _to_response_output(series: pd.Series, use_bytes: bool = True) -> ResponseOu
 
 
 def _ensure_bytes(elem: PackElement) -> bytes:
-    if isinstance(elem, str):
-        return encode_str(elem)
-
-    return elem
+    return encode_str(elem) if isinstance(elem, str) else elem
 
 
 @register_request_codec

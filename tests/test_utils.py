@@ -99,8 +99,7 @@ def test_uvloop_auto_install():
 
     if uvloop_available:
         assert type(policy).__module__.startswith("uvloop")
-    else:
-        if platform.system() == "Windows":
-            assert isinstance(policy, asyncio.WindowsProactorEventLoopPolicy)
-        elif platform.python_implementation() != "CPython":
-            assert isinstance(policy, asyncio.DefaultEventLoopPolicy)
+    elif platform.system() == "Windows":
+        assert isinstance(policy, asyncio.WindowsProactorEventLoopPolicy)
+    elif platform.python_implementation() != "CPython":
+        assert isinstance(policy, asyncio.DefaultEventLoopPolicy)

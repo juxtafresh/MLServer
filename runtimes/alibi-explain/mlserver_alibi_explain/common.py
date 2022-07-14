@@ -43,12 +43,11 @@ def convert_from_bytes(output: ResponseOutput, ty: Optional[Type] = None) -> Any
 
     if ty == str:
         return bytearray(output.data[0]).decode("UTF-8")
-    else:
-        py_str = bytearray(output.data[0]).decode("UTF-8")
+    py_str = bytearray(output.data[0]).decode("UTF-8")
 
-        from ast import literal_eval
+    from ast import literal_eval
 
-        return literal_eval(py_str)
+    return literal_eval(py_str)
 
 
 # TODO: add retry and better exceptions handling
@@ -101,8 +100,9 @@ class AlibiExplainSettings(BaseSettings):
 
 def import_and_get_class(class_path: str) -> type:
     last_dot = class_path.rfind(".")
-    klass = getattr(import_module(class_path[:last_dot]), class_path[last_dot + 1 :])
-    return klass
+    return getattr(
+        import_module(class_path[:last_dot]), class_path[last_dot + 1 :]
+    )
 
 
 def to_v2_inference_request(
@@ -137,7 +137,7 @@ def to_v2_inference_request(
 
     # For List[str] (e.g. AnchorText), we use StringCodec for input
     input_payload_codec = StringCodec if type(input_data) == list else NumpyCodec
-    v2_request = InferenceRequest(
+    return InferenceRequest(
         id=id_name,
         parameters=Parameters(content_type=input_payload_codec.ContentType),
         # TODO: we probably need to tell alibi about the expected types to use
@@ -149,4 +149,3 @@ def to_v2_inference_request(
         ],
         outputs=outputs,
     )
-    return v2_request

@@ -48,7 +48,7 @@ def _read_json_file(file_path: str) -> dict:
 def get_default_env(default_settings: List[Tuple[Type[BaseSettings], dict]]) -> dict:
     env = {}
     for settings_class, raw_defaults in default_settings:
-        env.update(_convert_to_env(settings_class, raw_defaults))
+        env |= _convert_to_env(settings_class, raw_defaults)
 
     return env
 

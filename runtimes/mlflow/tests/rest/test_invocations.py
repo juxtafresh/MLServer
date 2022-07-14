@@ -7,10 +7,7 @@ from typing import Optional, Union
 async def test_invocations_invalid_content_type(
     rest_client, content_type: Optional[str]
 ):
-    headers = {}
-    if content_type is not None:
-        headers = {"Content-Type": content_type}
-
+    headers = {"Content-Type": content_type} if content_type is not None else {}
     response = await rest_client.post("/invocations", headers=headers)
 
     assert response.status_code == 400

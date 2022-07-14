@@ -60,8 +60,7 @@ class Endpoints:
             payload, model_name, model_version
         )
 
-        response_headers = extract_headers(inference_response)
-        if response_headers:
+        if response_headers := extract_headers(inference_response):
             raw_response.headers.update(response_headers)
 
         return inference_response

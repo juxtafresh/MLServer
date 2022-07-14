@@ -42,13 +42,7 @@ class AlibiDetectRuntime(MLModel):
         model_uri = await get_model_uri(self._settings)
         try:
             self._model = load_detector(model_uri)
-        except (
-            ValueError,
-            FileNotFoundError,
-            EOFError,
-            NotImplementedError,
-            ValidationError,
-        ) as e:
+        except (ValueError, FileNotFoundError, EOFError, NotImplementedError) as e:
             raise MLServerError(
                 f"Invalid configuration for model {self._settings.name}: {e}"
             ) from e
@@ -69,11 +63,11 @@ class AlibiDetectRuntime(MLModel):
                 f"Invalid predict parameters for model {self._settings.name}: {e}"
             ) from e
 
-        outputs = []
-        for key in y["data"]:
-            outputs.append(
-                NumpyCodec.encode_output(name=key, payload=np.array([y["data"][key]]))
-            )
+        outputs = [
+            NumpyCodec.encode_output(name=key, payload=np.array([y["data"][key]]))
+            for key in y["data"]
+        ]
+
         return types.InferenceResponse(
             model_name=self.name,
             model_version=self.version,

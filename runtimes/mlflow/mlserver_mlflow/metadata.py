@@ -42,10 +42,7 @@ def _get_content_type(input_spec: InputSpec) -> Tuple[str, str]:
 
 
 def _get_shape(input_spec: InputSpec) -> List[int]:
-    if isinstance(input_spec, TensorSpec):
-        return list(input_spec.shape)
-
-    return [-1]
+    return list(input_spec.shape) if isinstance(input_spec, TensorSpec) else [-1]
 
 
 def to_metadata_tensors(
@@ -57,7 +54,7 @@ def to_metadata_tensors(
         datatype, content_type = _get_content_type(input_spec)
         shape = _get_shape(input_spec)
 
-        name = input_spec.name if input_spec.name else f"{prefix}{idx}"
+        name = input_spec.name or f"{prefix}{idx}"
 
         metadata_tensors.append(
             MetadataTensor(

@@ -136,10 +136,7 @@ async def test_batcher_cancels_responses(
         assert str(response) == message
 
 
-@pytest.mark.parametrize(
-    "requests",
-    [
-        [
+@pytest.mark.parametrize("requests", [[
             InferenceRequest(
                 id=f"request-{idx}",
                 inputs=[
@@ -154,22 +151,7 @@ async def test_batcher_cancels_responses(
             # 10 is the max_batch_size for sum_model
             # Make sure one batch is only half-full
             for idx in range(10 * 2 + 2)
-        ],
-        [
-            InferenceRequest(
-                id="large-request",
-                inputs=[
-                    # 10 is the max batch size, so we send a minibatch with
-                    # 20 entries
-                    RequestInput(
-                        name="input-0",
-                        shape=[10 * 2, 3],
-                        datatype="INT32",
-                        data=[n for n in range(10 * 2 * 3)],
-                    )
-                ],
-            ),
-            InferenceRequest(
+        ], [InferenceRequest(id="large-request", inputs=[RequestInput(name="input-0", shape=[10 * 2, 3], datatype="INT32", data=list(range(10 * 2 * 3)))]), InferenceRequest(
                 id="regular-request",
                 inputs=[
                     RequestInput(
@@ -179,10 +161,7 @@ async def test_batcher_cancels_responses(
                         data=[1000, 1001, 1002],
                     )
                 ],
-            ),
-        ],
-    ],
-)
+            )]])
 async def test_predict(
     requests: List[InferenceRequest],
     adaptive_batcher: AdaptiveBatcher,

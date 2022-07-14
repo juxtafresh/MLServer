@@ -139,8 +139,7 @@ class Worker(Process):
             )
 
     def _update_cb(self, update_task: Task):
-        err = update_task.exception()
-        if err:
+        if err := update_task.exception():
             logger.error(err)
 
         self._model_updates.task_done()

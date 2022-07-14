@@ -35,7 +35,7 @@ def _is_false(v: bool) -> bool:
 )
 async def _check_topics(admin_client: KafkaAdminClient, topics: List[str]) -> bool:
     existing_topics = admin_client.list_topics()
-    return all([topic in existing_topics for topic in topics])
+    return all(topic in existing_topics for topic in topics)
 
 
 async def create_test_topics(admin_client: KafkaAdminClient, topics: List[str]):

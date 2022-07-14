@@ -70,18 +70,16 @@ class AdaptiveBatcher:
             del self._async_responses[internal_id]
 
     def _start_batcher_if_needed(self):
-        if self._batching_task is not None:
-            if not self._batching_task.done():
-                # If task hasn't finished yet, let it keep running
-                return
+        if self._batching_task is not None and not self._batching_task.done():
+            # If task hasn't finished yet, let it keep running
+            return
 
         self._batching_task = schedule_with_callback(
             self._batcher(), self._batching_task_callback
         )
 
     def _batching_task_callback(self, batching_task: Task):
-        err = batching_task.exception()
-        if err:
+        if err := batching_task.exception():
             # Clear queue
             self._clear_queue(err)
 

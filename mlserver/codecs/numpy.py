@@ -56,22 +56,19 @@ def to_datatype(dtype: np.dtype) -> str:
         # If not present, try with kind
         as_str = getattr(dtype, "kind")
 
-    datatype = _NumpyToDatatype[as_str]
-
-    return datatype
+    return _NumpyToDatatype[as_str]
 
 
 def _to_ndarray(input_or_output: InputOrOutput) -> np.ndarray:
     data = getattr(input_or_output.data, "__root__", input_or_output.data)
     dtype = to_dtype(input_or_output)
 
-    if input_or_output.datatype == "BYTES":
-        if is_list_of(data, bytes):
-            # If the inputs is of type `BYTES`, there could be multiple "lists"
-            # serialised into multiple buffers.
-            # We will deserialise all of them and concatenate them together.
-            decoded = [np.frombuffer(buffer, dtype) for buffer in data]
-            return np.concatenate(decoded)
+    if input_or_output.datatype == "BYTES" and is_list_of(data, bytes):
+        # If the inputs is of type `BYTES`, there could be multiple "lists"
+        # serialised into multiple buffers.
+        # We will deserialise all of them and concatenate them together.
+        decoded = [np.frombuffer(buffer, dtype) for buffer in data]
+        return np.concatenate(decoded)
 
     return np.array(data, dtype)
 
@@ -103,7 +100,7 @@ class NumpyCodec(InputCodec):
     ContentType = "np"
 
     @classmethod
-    def can_encode(csl, payload: Any) -> bool:
+    def can_encode(cls, payload: Any) -> bool:
         return isinstance(payload, np.ndarray)
 
     @classmethod

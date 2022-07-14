@@ -19,12 +19,7 @@ def decode_str(encoded: PackElement, str_codec=_DefaultStrCodec) -> str:
     if isinstance(encoded, bytes):
         return encoded.decode(str_codec)
 
-    if isinstance(encoded, str):
-        # NOTE: It may be a string already when decoded from json
-        return encoded
-
-    # TODO: Should we raise an error here?
-    return ""
+    return encoded if isinstance(encoded, str) else ""
 
 
 def _decode_input_or_output(input_or_output: InputOrOutput) -> List[str]:

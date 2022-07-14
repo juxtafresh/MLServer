@@ -38,11 +38,7 @@ def _merge_data(
     if isinstance(sampled_datum, bytes):
         return b"".join(all_data)  # type: ignore
 
-    if isinstance(sampled_datum, list):
-        return sum(all_data, [])
-
-    # TODO: Should we raise an error if we couldn't merge the data?
-    return all_data
+    return sum(all_data, []) if isinstance(sampled_datum, list) else all_data
 
 
 class BatchedRequests:

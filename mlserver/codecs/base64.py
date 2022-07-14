@@ -13,19 +13,13 @@ _Base64StrCodec = "ascii"
 
 
 def _ensure_bytes(elem: PackElement) -> bytes:
-    if isinstance(elem, str):
-        return elem.encode(_Base64StrCodec)
-
-    return elem
+    return elem.encode(_Base64StrCodec) if isinstance(elem, str) else elem
 
 
 def _encode_base64(elem: PackElement, use_bytes: bool) -> Union[bytes, str]:
     as_bytes = _ensure_bytes(elem)
     b64_encoded = base64.b64encode(as_bytes)
-    if use_bytes:
-        return b64_encoded
-
-    return b64_encoded.decode(_Base64StrCodec)
+    return b64_encoded if use_bytes else b64_encoded.decode(_Base64StrCodec)
 
 
 def _decode_base64(elem: PackElement) -> bytes:

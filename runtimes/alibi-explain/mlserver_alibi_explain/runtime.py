@@ -93,7 +93,7 @@ class AlibiExplainRuntimeBase(MLModel):
         self, input_data: Any, settings: Optional[Parameters]
     ) -> ResponseOutput:
         """run async"""
-        explain_parameters = dict()
+        explain_parameters = {}
         if settings is not None:
             settings_dict = settings.dict()
             if EXPLAIN_PARAMETERS_TAG in settings_dict:

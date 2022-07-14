@@ -47,11 +47,7 @@ class NumpyroModel(MLModel):
         )
 
     def _extract_inputs(self, payload: types.InferenceRequest) -> Dict[str, np.ndarray]:
-        inputs = {}
-        for inp in payload.inputs:
-            inputs[inp.name] = np.array(inp.data)
-
-        return inputs
+        return {inp.name: np.array(inp.data) for inp in payload.inputs}
 
     def _model(self, marriage=None, age=None, divorce=None):
         a = numpyro.sample("a", dist.Normal(0.0, 0.2))

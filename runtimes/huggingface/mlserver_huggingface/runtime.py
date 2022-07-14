@@ -45,16 +45,18 @@ class HuggingFaceRuntime(MLModel):
                 ),
             )
 
-        if self.hf_settings.optimum_model:
-            if self.hf_settings.task not in SUPPORTED_OPTIMUM_TASKS:
-                raise InvalidTranformerInitialisation(
-                    500,
-                    (
-                        f"Invalid transformer task for "
-                        f"OPTIMUM model: {self.hf_settings.task}. "
-                        f"Supported Optimum tasks: {SUPPORTED_OPTIMUM_TASKS.keys()}"
-                    ),
-                )
+        if (
+            self.hf_settings.optimum_model
+            and self.hf_settings.task not in SUPPORTED_OPTIMUM_TASKS
+        ):
+            raise InvalidTranformerInitialisation(
+                500,
+                (
+                    f"Invalid transformer task for "
+                    f"OPTIMUM model: {self.hf_settings.task}. "
+                    f"Supported Optimum tasks: {SUPPORTED_OPTIMUM_TASKS.keys()}"
+                ),
+            )
 
         super().__init__(settings)
 

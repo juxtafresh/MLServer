@@ -23,11 +23,7 @@ def to_headers(context: ServicerContext) -> Dict[str, str]:
         # NOTE: Older versions of `grpcio` (e.g. `grpcio==1.34.0`) don't expose
         # access to the trailing metadata on the service side
         metadata += context.trailing_metadata()
-    headers = {}
-    for metadatum in metadata:
-        headers[metadatum.key] = metadatum.value
-
-    return headers
+    return {metadatum.key: metadatum.value for metadatum in metadata}
 
 
 def to_metadata(headers: Dict[str, str]) -> Tuple[Tuple[str, str], ...]:

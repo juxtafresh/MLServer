@@ -19,10 +19,7 @@ def _encode_value(v: dict) -> bytes:
 
 
 def _decode_value(v: Union[bytes, str]) -> dict:
-    if orjson is None:
-        return json.loads(v)
-
-    return orjson.loads(v)
+    return json.loads(v) if orjson is None else orjson.loads(v)
 
 
 def _encode_headers(h: Dict[str, str]) -> List[Tuple[str, bytes]]:
@@ -54,10 +51,7 @@ class KafkaMessage(BaseModel):
 
     @property
     def encoded_key(self) -> bytes:
-        if not self.key:
-            return b""
-
-        return self.key.encode("utf-8")
+        return self.key.encode("utf-8") if self.key else b""
 
     @property
     def encoded_value(self) -> bytes:

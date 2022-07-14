@@ -27,10 +27,7 @@ class MultiInputRequestCodec(RequestCodec):
 
     @classmethod
     def can_encode(cls, payload: Any) -> bool:
-        if cls.InputCodec is None:
-            return False
-
-        return cls.InputCodec.can_encode(payload)
+        return False if cls.InputCodec is None else cls.InputCodec.can_encode(payload)
 
     @classmethod
     def encode_response(

@@ -19,7 +19,7 @@ class SumModel(MLModel):
     @custom_handler(rest_path="/custom-endpoint-with-long-response")
     async def long_response_endpoint(self, length: int) -> Dict[str, str]:
         alphabet = string.ascii_lowercase
-        response = "".join(random.choice(alphabet) for i in range(length))
+        response = "".join(random.choice(alphabet) for _ in range(length))
         return {"foo": response}
 
     async def predict(self, payload: InferenceRequest) -> InferenceResponse:
@@ -37,10 +37,11 @@ class SumModel(MLModel):
         if payload.parameters and payload.parameters.headers:
             # "Echo" headers back prefixed by `x-`
             request_headers = payload.parameters.headers
-            response_headers = {}
-            for header_name, header_value in request_headers.items():
-                if header_name.startswith("x-"):
-                    response_headers[header_name] = header_value
+            response_headers = {
+                header_name: header_value
+                for header_name, header_value in request_headers.items()
+                if header_name.startswith("x-")
+            }
 
             response.parameters = Parameters(headers=response_headers)
 

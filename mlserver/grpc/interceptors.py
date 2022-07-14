@@ -62,9 +62,11 @@ class PromServerInterceptor(ServerInterceptor):
         # Backwards compatibility for non-aio.
         # TODO: It's not clear yet how to check whether the context has been
         # cancelled with aio.
-        if hasattr(servicer_context, "_state"):
-            if servicer_context._state.client == "cancelled":
-                return StatusCode.CANCELLED
+        if (
+            hasattr(servicer_context, "_state")
+            and servicer_context._state.client == "cancelled"
+        ):
+            return StatusCode.CANCELLED
 
         if not hasattr(servicer_context, "code"):
             return StatusCode.OK

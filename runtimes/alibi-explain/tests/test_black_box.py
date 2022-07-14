@@ -35,8 +35,7 @@ _DEFAULT_ID_NAME = "dummy_id"
 def payload() -> InferenceRequest:
     data = np.random.randn(1, 28, 28, 1) * 255
 
-    # now we go via the inference model and see if we get the same results
-    inference_request = InferenceRequest(
+    return InferenceRequest(
         parameters=Parameters(content_type=NumpyCodec.ContentType),
         inputs=[
             RequestInput(
@@ -47,7 +46,6 @@ def payload() -> InferenceRequest:
             )
         ],
     )
-    return inference_request
 
 
 async def test_predict_impl(
@@ -84,8 +82,7 @@ async def test_predict_impl(
 @pytest.fixture()
 def alibi_anchor_image_model(anchor_image_directory):
     inference_model = tf.keras.models.load_model(get_tf_mnist_model_uri())
-    model = load_explainer(anchor_image_directory, inference_model.predict)
-    return model
+    return load_explainer(anchor_image_directory, inference_model.predict)
 
 
 async def test_end_2_end(
